@@ -6,9 +6,10 @@
 		<script>
 			var canvas;
 			var context;
-			var points = [];
+			var isTouchable = false;
 			var prev;
 			var next;
+
 			function drawLine(){
 				if(prev && next){
 					context.beginPath();
@@ -17,10 +18,14 @@
 					context.closePath();
 					context.stroke();
 				}
-			};
+			}
+
 			function addPoint(e){
 				prev = next;
-				next = {
+				next = e.type === "touchmove" ? {
+					x: e.changedTouches[0].clientX,
+					y: e.changedTouches[0].clientY,
+				} : {
 					x: e.clientX,
 					y: e.clientY,
 				};
@@ -36,10 +41,14 @@
 				var down;
 				var up;
 				var move;
-				
+
 				if ((navigator.userAgent.indexOf('iPhone') > 0 && navigator.userAgent.indexOf('iPad') == -1) ||
 				navigator.userAgent.indexOf('iPod') > 0 ||
 			 	navigator.userAgent.indexOf('Android') > 0) {
+			 		isTouchable = true;
+				}
+
+				if(isTouchable){
 					down = "touchstart";
 					up = "touchmove";
 					move = "touchend";

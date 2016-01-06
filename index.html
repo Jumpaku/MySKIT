@@ -35,6 +35,7 @@
 				canvas = document.getElementById("maincanvas");
 				context = canvas.getContext("2d");
 				var addLine = function(e){
+					e.preventDefault();
 					addPoint(e);
 					drawLine();
 				};

@@ -33,17 +33,34 @@
 					addPoint(e);
 					drawLine();
 				};
+				var down;
+				var up;
+				var move;
+				
+				if ((navigator.userAgent.indexOf('iPhone') > 0 && navigator.userAgent.indexOf('iPad') == -1) ||
+				navigator.userAgent.indexOf('iPod') > 0 ||
+			 	navigator.userAgent.indexOf('Android') > 0) {
+					down = "touchstart";
+					up = "touchmove";
+					move = "touchend";
+				}
+				else{
+					down = "mousedown";
+					up = "mouseup";
+					move = "mousemove";
+				}
+			
 				var startDraw = function(){
-					canvas.removeEventListener("mousedown", startDraw);
-					canvas.addEventListener("mousemove", addLine);
-					canvas.addEventListener("mouseup", function(){
-						canvas.removeEventListener("mousemove", addLine);
+					canvas.removeEventListener(down, startDraw);
+					canvas.addEventListener(move, addLine);
+					canvas.addEventListener(up, function(){
+						canvas.removeEventListener(move, addLine);
 						prev = null;
 						next = null;
-						canvas.addEventListener("mousedown", startDraw);
+						canvas.addEventListener(down, startDraw);
 					});
 				}
-				canvas.addEventListener("mousedown", startDraw);
+				canvas.addEventListener(down, startDraw);
 			}
 		</script>
 	</head>

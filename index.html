@@ -53,8 +53,8 @@
 
 				if(isTouchable){
 					down = "touchstart";
-					up = "touchmove";
-					move = "touchend";
+					up = "touchend";
+					move = "touchmove";
 				}
 				else{
 					down = "mousedown";
@@ -82,13 +82,13 @@
 					// Iterate through the list of touch points that changed
 					// since the last event and print each touch point's identifier.
 					for (var i=0; i < e.changedTouches.length; i++) {
-						alert(e);
+						console.log(e);
 					} 
 				}, false);
 			}
 		</script>
 	</head>
-	<body onload="test();//start();//">
+	<body onload="start();//test();//start();//">
 
 		<canvas id="maincanvas" height="200" width="200"></canvas>
 

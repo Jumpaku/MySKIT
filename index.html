@@ -75,8 +75,20 @@
 				canvas.addEventListener(down, startDraw);
 			}
 		</script>
+		<script>
+			function test(){
+				var someElement = document.getElementById("maincanvas");
+				someElement.addEventListener('touchmove', function(e) {
+					// Iterate through the list of touch points that changed
+					// since the last event and print each touch point's identifier.
+					for (var i=0; i < e.changedTouches.length; i++) {
+						console.log("changedTouches[" + i + "].identifier = " + e.changedTouches[i].identifier);
+					} 
+				}, false);
+			}
+		</script>
 	</head>
-	<body onload="start();">
+	<body onload="test();//start();//">
 
 		<canvas id="maincanvas" height="200" width="200"></canvas>
 

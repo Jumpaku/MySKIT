@@ -1,89 +1,53 @@
 <!DOCTYPE html>
 <html lang="ja">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-		<title>Myskit by Jumpaku</title>
-		<style type="text/css">
-			#maincanvas {
-				background: #ddf;
-				display: block;
-				margin: auto;
-			}
-		</style>
-		<script>
-			var canvas;
-			var context;
-			var isTouchable = false;
-			var prev;
-			var next;
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Myskit</title>
+	<style type="text/css">
+		body, #maincanvas {
+			margin:0;
+			padding: 0;
+		}
+		#maincanvas {
+			background: #ddf;
+		}
+	</style>
+	<script src="https://code.jquery.com/pep/0.4.0/pep.js"></script>
+	<script src="jquery-2.2.0.js"></script>
+	<script>
+		function start(){
+			$(function(){
+				$("#maincanvas").get(0).height = $(window).height();
+				$("#maincanvas").get(0).width = $(window).width();
+			});
 
-			function drawLine(){
-				if(prev && next){
+			var canvas = document.getElementById("maincanvas");
+			var context = canvas.getContext("2d");
+			var from, to;
+		
+			canvas.addEventListener("pointerdown", function(e){
+				from = {x: e.clientX, y:e.clientY};
+			});
+			canvas.addEventListener("pointermove", function(e){
+				e.preventDefault();
+				if(from){
+					to = {x: e.clientX, y: e.clientY,};
 					context.beginPath();
-					context.moveTo(prev.x, prev.y);
-					context.lineTo(next.x, next.y);
+					context.moveTo(from.x, from.y);
+					context.lineTo(to.x, to.y);
 					context.closePath();
 					context.stroke();
+					from = to;
 				}
-			}
-
-			function addPoint(e){
-				prev = next;
-				next = isTouchable ? {
-					x: e.targetTouches[0].clientX,
-					y: e.targetTouches[0].clientY,
-				} : {
-					x: e.clientX,
-					y: e.clientY,
-				};
-			}
-
-			function start(){
-				canvas = document.getElementById("maincanvas");
-				context = canvas.getContext("2d");
-				var addLine = function(e){
-					e.preventDefault();
-					addPoint(e);
-					drawLine();
-				};
-				var down;
-				var up;
-				var move;
-
-				if ((navigator.userAgent.indexOf('iPhone') > -1 && navigator.userAgent.indexOf('iPad') == -1) ||
-					navigator.userAgent.indexOf('iPod') > -1 ||
-				 	navigator.userAgent.indexOf('Android') > -1) {
-				 	
-				 	isTouchable = true;
-				}
-
-				if(isTouchable){
-					down = "touchstart";
-					up = "touchend";
-					move = "touchmove";
-				}
-				else{
-					down = "mousedown";
-					up = "mouseup";
-					move = "mousemove";
-				}
-			
-				var startDraw = function(){
-					canvas.removeEventListener(down, startDraw);
-					canvas.addEventListener(move, addLine);
-					canvas.addEventListener(up, function(){
-						canvas.removeEventListener(move, addLine);
-						prev = null;
-						next = null;
-						canvas.addEventListener(down, startDraw);
-					});
-				}
-				canvas.addEventListener(down, startDraw);
-			}
-		</script>
-	</head>
-	<body onload="start();">
-		<canvas id="maincanvas"></canvas>
-	</body>
+			});
+			canvas.addEventListener("pointerup", function(){
+				from = null;
+			});
+		}
+	</script>
+</head>
+<body onload="start();">
+	<canvas id="maincanvas" touch-action="none"></canvas>
+</body>
 </html>
